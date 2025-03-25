@@ -54,5 +54,18 @@ namespace RepositoryLayer.Services
             }
             return true;
         }
+
+        public UserEntity Login(LoginModel login)
+        {
+            var result = this.context.Users.FirstOrDefault(x => x.Email == login.Email);
+            if (result != null)
+            {
+                if (result.Password == EncodePasswordToBase64(login.Password))
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
     }
 }
