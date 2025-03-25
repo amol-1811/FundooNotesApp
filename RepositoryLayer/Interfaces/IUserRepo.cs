@@ -9,5 +9,6 @@ namespace RepositoryLayer.Interfaces
     public interface IUserRepo
     {
         public UserEntity Register(RegisterModel model);
+        public bool CheckEmail(string email);
     }
 }
