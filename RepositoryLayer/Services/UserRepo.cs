@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommonLayer.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
@@ -58,13 +59,11 @@ namespace RepositoryLayer.Services
         public UserEntity Login(LoginModel login)
         {
             var result = this.context.Users.FirstOrDefault(x => x.Email == login.Email);
-            if (result != null)
-            {
-                if (result.Password == EncodePasswordToBase64(login.Password))
-                {
-                    return result;
-                }
+            var isPasswordMatch = EncodePasswordToBase64(login.Password);
+            if (isPasswordMatch != null) {
+                return result;
             }
+            
             return null;
         }
     }
