@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CommonLayer.Models;
 using ManagerLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -36,10 +37,35 @@ namespace FundooNotesApp.Controllers
                     return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Add Note" });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        [HttpGet]
+        [Route("GetNotes")]
+
+        public IActionResult GetNotes()
+        {
+            try
+            {
+                List<NotesEntity> getData = notesManager.GetNotes();
+                if (getData != null)
+                {
+                    return Ok(new ResponseModel<NotesEntity> { Success = true, Message = "Notes Retrieved Successfully", AllData = getData });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Retrieve Notes" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+
         }
     }
 }

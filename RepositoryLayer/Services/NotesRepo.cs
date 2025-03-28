@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CommonLayer.Models;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,10 @@ namespace RepositoryLayer.Services
             return note;
         }
 
-
+        public List<NotesEntity> GetNotes()
+        {
+            List<NotesEntity> notes = context.Notes.ToList();
+            return notes;
+        }
     }
 }

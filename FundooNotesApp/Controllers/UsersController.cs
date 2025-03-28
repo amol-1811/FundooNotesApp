@@ -112,6 +112,5 @@ namespace FundooNotesApp.Controllers
                 throw ex;
             }
         }
-
     }
 }

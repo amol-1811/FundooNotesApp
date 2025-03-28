@@ -21,5 +21,10 @@ namespace ManagerLayer.Services
         {
             return notesRepo.AddNotes(UserId, model);
         }
+
+        public List<NotesEntity> GetNotes()
+        {
+            return notesRepo.GetNotes();
+        }
     }
 }
