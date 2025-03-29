@@ -10,5 +10,7 @@ namespace ManagerLayer.Interfaces
     {
         public NotesEntity AddNotes(int UserId, NotesModel model);
         public List<NotesEntity> GetNotes();
+        public List<NotesEntity> GetAllNotesUsingDescAndTitle(string title, string description);
+        public int CountAllNotes();
     }
 }

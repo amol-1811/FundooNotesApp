@@ -40,5 +40,40 @@ namespace ManagerLayer.Services
             return userRepo.ResetPassword(Email, resetPasswordModel);
         }
 
+        public List<UserEntity> GetAllUsers()
+        {
+            return userRepo.GetAllUsers();
+        }
+
+        public UserEntity GetUserById(int userId)
+        {
+            return userRepo.GetUserById(userId);
+        }
+
+        public List<UserEntity> GetUserByFirstLetter(string letter)
+        {
+            return userRepo.GetUserByFirstLetter(letter);
+        }
+
+        public int CountUsers()
+        {
+            return userRepo.CountUsers();
+        }
+        public List<UserEntity> GetUsersByOrder(bool ascending)
+        {
+            return userRepo.GetUsersByOrder(ascending);
+        }
+        public double GetAverageAge()
+        {
+            return userRepo.GetAverageAge();
+        }
+        public int GetYoungestAge()
+        {
+            return userRepo.GetYoungestAge();
+        }
+        public int GetOldestAge()
+        {
+            return userRepo.GetOldestAge();
+        }
     }
 }

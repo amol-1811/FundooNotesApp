@@ -55,7 +55,7 @@ namespace RepositoryLayer.Services
         public bool CheckEmail(string email)
         {
             var result = this.context.Users.FirstOrDefault(x => x.Email == email);
-            if(result == null)
+            if (result == null)
             {
                 return false;
             }
@@ -65,12 +65,12 @@ namespace RepositoryLayer.Services
         public string Login(LoginModel login)
         {
             var checkUser = this.context.Users.FirstOrDefault(x => x.Email == login.Email && x.Password == EncodePasswordToBase64(login.Password));
-            if (checkUser != null) 
+            if (checkUser != null)
             {
                 var token = GenerateToken(checkUser.Email, checkUser.UserId);
                 return token;
             }
-            
+
             return null;
         }
 
@@ -117,6 +117,87 @@ namespace RepositoryLayer.Services
             else
             {
                 return false;
+            }
+        }
+
+        public List<UserEntity> GetAllUsers()
+        {
+            return context.Users.ToList();
+        }
+
+        public UserEntity GetUserById(int userId)
+        {
+            return context.Users.FirstOrDefault(x => x.UserId == userId);
+        }
+
+        public List<UserEntity> GetUserByFirstLetter(string letter)
+        {
+            return context.Users.Where(x => x.FirstName.StartsWith(letter)).ToList();
+        }
+
+        public int CountUsers()
+        {
+            return context.Users.Count();
+        }
+
+        public List<UserEntity> GetUsersByOrder(bool ascending)
+        {
+            if(ascending)
+            {
+                return context.Users.OrderBy(x => x.FirstName).ToList();
+            }
+            else
+            {
+                return context.Users.OrderByDescending(x => x.FirstName).ToList();
+            }
+        }
+
+        public double GetAverageAge()
+        {
+            try
+            {
+                return context.Users.Average(x => (DateTime.Now.Year - x.DOB.Year));
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public int GetYoungestAge()
+        {
+            try
+            {
+                if (!context.Users.Any())
+                {
+                    return 0;
+                }
+                var youngestAge = context.Users.Where(x => x.DOB != null).Select(x => DateTime.Now.Year - x.DOB.Year).ToList();
+                if (youngestAge.Count == 0)
+                {
+                    return 0;
+                }
+                return youngestAge.Min();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public int GetOldestAge()
+        {
+            try
+            {
+                if (!context.Users.Any())
+                {
+                    return 0;
+                }
+                var oldestAge = context.Users.Where(x => x.DOB != null).Select(x => DateTime.Now.Year - x.DOB.Year).Max();
+                return oldestAge;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
     }

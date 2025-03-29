@@ -53,7 +53,7 @@ namespace FundooNotesApp.Controllers
                 List<NotesEntity> getData = notesManager.GetNotes();
                 if (getData != null)
                 {
-                    return Ok(new ResponseModel<NotesEntity> { Success = true, Message = "Notes Retrieved Successfully", AllData = getData });
+                    return Ok(new ResponseModel<List<NotesEntity>> { Success = true, Message = "Notes Retrieved Successfully", Data = getData });
                 }
                 else
                 {
@@ -64,8 +64,39 @@ namespace FundooNotesApp.Controllers
             {
                 throw ex;
             }
+        }
 
+        [HttpGet]
+        [Route("GetAllNotesUsingDescAndTitle")]
+        public IActionResult GetNotesByTitleAndDis(string Title, string description)
+        {
+            try
+            {
+                List<NotesEntity> notes = notesManager.GetAllNotesUsingDescAndTitle(Title, description);
 
+                if (notes == null)
+                {
+                    return BadRequest(new ResponseModel<NotesEntity> { Success = true, Message = "get notes successfully" });
+                }
+                return Ok(notes);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("CountAllNotes")]
+
+        public IActionResult CountAllNotes()
+        {
+            var result = notesManager.CountAllNotes();
+            if (result != null)
+            {
+                return Ok(new ResponseModel<int> { Success = true, Message = "Counting successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<int> { Success = false, Message = "Failed to count users" });
         }
     }
 }

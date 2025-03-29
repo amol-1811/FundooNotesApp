@@ -7,6 +7,7 @@ using MassTransit;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using System.Collections.Generic;
 
 namespace FundooNotesApp.Controllers
 {
@@ -111,6 +112,101 @@ namespace FundooNotesApp.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpGet]
+        [Route("GetAllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            var result = userManager.GetAllUsers();
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<UserEntity>> { Success = true, Message = "Users retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<List<UserEntity>> { Success = false, Message = "Failed to retrieve users", Data = result });
+        }
+
+        [HttpGet]
+        [Route("GetUserById")]
+        public IActionResult GetUserById(int userId)
+        {
+            var result = userManager.GetUserById(userId);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<UserEntity> { Success = true, Message = "User retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<UserEntity> { Success = false, Message = "Failed to retrieve user", Data = result });
+        }
+
+        [HttpGet]
+        [Route("GetUserByFirstLetter")]
+        public IActionResult GetUserByFirsttLetter(string letter)
+        {
+            var result = userManager.GetUserByFirstLetter(letter);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<UserEntity>> { Success = true, Message = "Users retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<List<UserEntity>> { Success = false, Message = "Failed to retrieve users", Data = result });
+        }
+
+        [HttpGet]
+        [Route("CountUsers")]
+        public IActionResult CountUsers()
+        {
+            var result = userManager.CountUsers();
+            if (result != null)
+            {
+                return Ok(new ResponseModel<int> { Success = true, Message = "Counting successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<int> { Success = false, Message = "Failed to count users"});
+        }
+
+        [HttpGet]
+        [Route("GetUsersByOrder")]
+        public IActionResult GetUsersByOrder(bool ascending)
+        {
+            var result = userManager.GetUsersByOrder(ascending);
+            if (result != null)
+            {
+                return Ok(new ResponseModel<List<UserEntity>> { Success = true, Message = "Users retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<List<UserEntity>> { Success = false, Message = "Failed to retrieve users", Data = result });
+        }
+
+        [HttpGet]
+        [Route("GetAverageAge")]
+        public IActionResult GetAverageAge()
+        {
+            var result = userManager.GetAverageAge();
+            if (result != null)
+            {
+                return Ok(new ResponseModel<double> { Success = true, Message = "Average age retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<double> { Success = false, Message = "Failed to retrieve average age", Data = result });
+        }
+
+        [HttpGet]
+        [Route("GetYoungestAge")]
+        public IActionResult GetYoungestAge()
+        {
+            var result = userManager.GetYoungestAge();
+            if (result != null)
+            {
+                return Ok(new ResponseModel<int> { Success = true, Message = "Youngest age retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<int> { Success = false, Message = "Failed to retrieve youngest age", Data = result });
+        }
+        [HttpGet]
+        [Route("GetOldestAge")]
+        public IActionResult GetOldestAge()
+        {
+            var result = userManager.GetOldestAge();
+            if (result != null)
+            {
+                return Ok(new ResponseModel<int> { Success = true, Message = "Oldest age retrieved successfully", Data = result });
+            }
+            return BadRequest(new ResponseModel<int> { Success = false, Message = "Failed to retrieve oldest age", Data = result });
         }
     }
 }

@@ -36,5 +36,16 @@ namespace RepositoryLayer.Services
             List<NotesEntity> notes = context.Notes.ToList();
             return notes;
         }
+
+        public List<NotesEntity> GetAllNotesUsingDescAndTitle(string title, string description)
+        {
+            List<NotesEntity> notes = context.Notes.Where(x => x.Title == title && x.Description == description).ToList();
+            return notes;
+        }
+
+        public int CountAllNotes()
+        {
+            return context.Notes.Count();
+        }
     }
 }

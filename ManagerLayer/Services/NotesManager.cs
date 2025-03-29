@@ -26,5 +26,14 @@ namespace ManagerLayer.Services
         {
             return notesRepo.GetNotes();
         }
+        public List<NotesEntity> GetAllNotesUsingDescAndTitle(string title,  string description)
+        {
+            return notesRepo.GetAllNotesUsingDescAndTitle(title, description);
+        }
+
+        public int CountAllNotes()
+        {
+            return notesRepo.CountAllNotes();
+        }
     }
 }
