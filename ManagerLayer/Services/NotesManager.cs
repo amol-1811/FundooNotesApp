@@ -55,5 +55,17 @@ namespace ManagerLayer.Services
         {
             return notesRepo.TrashNotes(noteId, UserId);
         }
+        public int RestoreFromTrash(int noteId, int UserId)
+        {
+            return notesRepo.RestoreFromTrash(noteId, UserId);
+        }
+        public bool AddColor(int noteId, string Colour, int UserId)
+        {
+            return notesRepo.AddColor(noteId, Colour, UserId);
+        }
+        public bool AddReminder(int noteId, DateTime reminder, int UserId)
+        {
+            return notesRepo.AddReminder(noteId, reminder, UserId);
+        }
     }
 }

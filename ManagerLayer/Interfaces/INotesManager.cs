@@ -17,5 +17,8 @@ namespace ManagerLayer.Interfaces
         public int PinNotes(int noteId, int UserId);
         public int ArchiveNote(int noteId, int UserId);
         public int TrashNotes(int noteId, int UserId);
+        public int RestoreFromTrash(int noteId, int UserId);
+        public bool AddColor(int noteId, string Colour, int UserId);
+        public bool AddReminder(int noteId, DateTime reminder, int UserId);
     }
 }

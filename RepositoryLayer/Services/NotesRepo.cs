@@ -136,5 +136,43 @@ namespace RepositoryLayer.Services
             }
             return 3;
         }
+
+        public int RestoreFromTrash(int noteId, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                if (note.IsTrash)
+                {
+                    note.IsTrash = false;
+                    context.SaveChanges();
+                    return 1;
+                }
+            }
+            return 3;
+        }
+        public bool AddColor(int noteId, string Colour, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                note.Color = Colour;
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddReminder(int noteId, DateTime Reminder, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                note.Reminder = Reminder;
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

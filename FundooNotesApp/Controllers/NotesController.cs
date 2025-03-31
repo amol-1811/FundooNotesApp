@@ -214,5 +214,73 @@ namespace FundooNotesApp.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("RestoreFromTrash")]
+        public IActionResult RestoreFromTrash(int noteId)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                int result = notesManager.RestoreFromTrash(noteId, UserId);
+                if (result != 0)
+                {
+                    return Ok(new ResponseModel<int> { Success = true, Message = "Note Restored Successfully", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Restore Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPut]
+        [Route("AddColor")]
+        public IActionResult AddColor(int noteId, string Colour)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                bool result = notesManager.AddColor(noteId, Colour, UserId);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Color Added Successfully" });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Add Color" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        [HttpPut]
+        [Route("AddReminder")]
+        public IActionResult AddReminder(int noteId, DateTime reminder)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                bool result = notesManager.AddReminder(noteId, reminder, UserId);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Reminder Added Successfully" });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Add Reminder" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
