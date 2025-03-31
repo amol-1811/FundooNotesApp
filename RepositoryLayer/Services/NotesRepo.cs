@@ -72,5 +72,69 @@ namespace RepositoryLayer.Services
             }
             return null;
         }
+
+        public int PinNotes(int noteId, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                if (note.IsPin)
+                {
+                    note.IsPin = false;
+                    context.SaveChanges();
+                    return 1;
+                }
+                else
+                {
+                    note.IsPin = true;
+                    context.SaveChanges();
+                    return 2;
+                }
+            }
+            return 3;
+        }
+
+
+        public int ArchiveNote(int noteId, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                if (note.IsArchive)
+                {
+                    note.IsArchive = false;
+                    context.SaveChanges();
+                    return 1;
+                }
+                else
+                {
+                    note.IsArchive = true;
+                    context.SaveChanges();
+                    return 2;
+                }
+            }
+            return 3;
+        }
+
+        public int TrashNotes(int noteId, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                if (note.IsTrash)
+                {
+                    note.IsTrash = false;
+                    context.SaveChanges();
+                    return 1;
+                }
+                else
+                {
+                    note.IsTrash = true;
+                    context.SaveChanges();
+                    return 2;
+                }
+            }
+            return 3;
+        }
     }
 }

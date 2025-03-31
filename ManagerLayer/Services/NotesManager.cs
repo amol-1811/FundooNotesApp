@@ -43,5 +43,17 @@ namespace ManagerLayer.Services
         {
             return notesRepo.UpdateNotes(notesId, UserId, model);
         }
+        public int PinNotes(int noteId, int UserId)
+        {
+            return notesRepo.PinNotes(noteId, UserId);
+        }
+        public int ArchiveNote(int noteId, int UserId)
+        {
+            return notesRepo.ArchiveNote(noteId, UserId);
+        }
+        public int TrashNotes(int noteId, int UserId)
+        {
+            return notesRepo.TrashNotes(noteId, UserId);
+        }
     }
 }

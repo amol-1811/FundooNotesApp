@@ -144,5 +144,75 @@ namespace FundooNotesApp.Controllers
                 throw ex;
             }
         }
+
+        [HttpPut]
+        [Route("PinNotes")]
+        public IActionResult PinNotes(int noteId)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                int result = notesManager.PinNotes(noteId, UserId);
+                if (result != 0)
+                {
+                    return Ok(new ResponseModel<int> { Success = true, Message = "Note Pinned Successfully", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Pin Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPut]
+        [Route("ArchiveNote")]
+        public IActionResult ArchiveNote(int noteId)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                int result = notesManager.ArchiveNote(noteId, UserId);
+                if (result != 0)
+                {
+                    return Ok(new ResponseModel<int> { Success = true, Message = "Note Archived Successfully", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Archive Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPut]
+        [Route("TrashNotes")]
+        public IActionResult TrashNotes(int noteId)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                int result = notesManager.TrashNotes(noteId, UserId);
+                if (result != 0)
+                {
+                    return Ok(new ResponseModel<int> { Success = true, Message = "Note Trashed Successfully", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Trash Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

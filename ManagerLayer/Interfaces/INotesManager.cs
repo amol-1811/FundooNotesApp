@@ -14,5 +14,8 @@ namespace ManagerLayer.Interfaces
         public int CountAllNotes();
         public bool DeleteNote(int notesId);
         public NotesEntity UpdateNotes(int notesId, int UserId, UpdateModel model);
+        public int PinNotes(int noteId, int UserId);
+        public int ArchiveNote(int noteId, int UserId);
+        public int TrashNotes(int noteId, int UserId);
     }
 }
