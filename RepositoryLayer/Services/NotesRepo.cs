@@ -47,5 +47,30 @@ namespace RepositoryLayer.Services
         {
             return context.Notes.Count();
         }
+
+        public bool DeleteNote(int notesId)
+        {
+            NotesEntity note = context.Notes.Where(x => x.NotesId == notesId).FirstOrDefault();
+            if (note != null)
+            {
+                context.Notes.Remove(note);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public NotesEntity UpdateNotes(int notesId, int UserId, UpdateModel model)
+        {
+            NotesEntity note = context.Notes.Where(x => x.NotesId == notesId && x.UserId == UserId).FirstOrDefault();
+            if (note != null)
+            {
+                note.Title = model.Title;
+                note.Description = model.Description;
+                context.SaveChanges();
+                return note;
+            }
+            return null;
+        }
     }
 }

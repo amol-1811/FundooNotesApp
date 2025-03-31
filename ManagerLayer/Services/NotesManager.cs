@@ -35,5 +35,13 @@ namespace ManagerLayer.Services
         {
             return notesRepo.CountAllNotes();
         }
+        public bool DeleteNote(int notesId)
+        {
+            return notesRepo.DeleteNote(notesId);
+        }
+        public NotesEntity UpdateNotes(int notesId, int UserId, UpdateModel model)
+        {
+            return notesRepo.UpdateNotes(notesId, UserId, model);
+        }
     }
 }

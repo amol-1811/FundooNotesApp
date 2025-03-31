@@ -98,5 +98,51 @@ namespace FundooNotesApp.Controllers
             }
             return BadRequest(new ResponseModel<int> { Success = false, Message = "Failed to count users" });
         }
+
+        [HttpDelete]
+        [Route("DeleteNote")]
+        public IActionResult DeleteNote(int notesId)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                bool result = notesManager.DeleteNote(notesId);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Note Deleted Successfully" });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<NotesEntity> { Success = false, Message = "Failed to Delete Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateNotes")]
+        public IActionResult UpdateNotes(int notesId, UpdateModel model)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                NotesEntity result = notesManager.UpdateNotes(notesId, UserId, model);
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<NotesEntity> { Success = true, Message = "Note Updated Successfully", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Update Note" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
