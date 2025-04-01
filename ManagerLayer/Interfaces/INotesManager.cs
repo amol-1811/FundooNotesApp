@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using CommonLayer.Models;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 
 namespace ManagerLayer.Interfaces
@@ -20,5 +21,9 @@ namespace ManagerLayer.Interfaces
         public int RestoreFromTrash(int noteId, int UserId);
         public bool AddColor(int noteId, string Colour, int UserId);
         public bool AddReminder(int noteId, DateTime reminder, int UserId);
+        public bool AddImage(int noteId, int UserId, IFormFile Image);
+        public int AddCollaborator(int noteId, string Email, int UserId);
+        public List<CollaboratorEntity> GetCollaborators(int noteId);
+        public bool RemoveCollaborator(int noteId, string Email);
     }
 }

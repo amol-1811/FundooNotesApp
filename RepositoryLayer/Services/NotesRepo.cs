@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using CommonLayer.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
@@ -13,11 +18,12 @@ namespace RepositoryLayer.Services
     public class NotesRepo : INotesRepo
     {
         private readonly FundooDBContext context;
-        //private readonly IConfiguration configuration;
+        private readonly IConfiguration configuration;
 
-        public NotesRepo(FundooDBContext context)
+        public NotesRepo(FundooDBContext context, IConfiguration configuration)
         {
             this.context = context;
+            this.configuration = configuration;
         }
 
         public NotesEntity AddNotes(int UserId, NotesModel model)
@@ -67,6 +73,12 @@ namespace RepositoryLayer.Services
             {
                 note.Title = model.Title;
                 note.Description = model.Description;
+                note.Reminder = model.Reminder;
+                note.IsPin = model.IsPin;
+                note.IsArchive = model.IsArchive;
+                note.IsTrash = model.IsTrash;
+                note.Color = model.Color;
+                note.Image = model.Image;
                 context.SaveChanges();
                 return note;
             }
@@ -174,5 +186,67 @@ namespace RepositoryLayer.Services
             }
             return false;
         }
+
+        public bool AddImage(int noteId, int UserId, IFormFile Image)
+
+        {
+            NotesEntity note = context.Notes.ToList().Find(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                Account account = new Account(
+                    configuration["CloudinarySettings:CloudName"],
+                    configuration["CloudinarySettings:ApiKey"],
+                    configuration["CloudinarySettings:ApiSecret"]
+                );
+                Cloudinary cloudinary = new Cloudinary(account);
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(Image.FileName, Image.OpenReadStream())
+                };
+
+                var uploadResult = cloudinary.Upload(uploadParams);
+                string ImageUrl = uploadResult.Url.ToString();
+                note.Image = ImageUrl;
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public int AddCollaborator(int noteId, string Email, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                CollaboratorEntity collaborator = new CollaboratorEntity();
+                collaborator.Email = Email;
+                collaborator.NotesId = noteId;
+                collaborator.UserId = UserId;
+                context.Collaborators.Add(collaborator);
+                context.SaveChanges();
+                return 1;
+            }
+            return 2;
+        }
+
+        public List<CollaboratorEntity> GetCollaborators(int noteId)
+        {
+            List<CollaboratorEntity> collaborators = context.Collaborators.Where(x => x.NotesId == noteId).ToList();
+            return collaborators;
+        }
+
+        public bool RemoveCollaborator(int noteId, string Email)
+        {
+            CollaboratorEntity collaborator = context.Collaborators.FirstOrDefault(x => x.NotesId == noteId && x.Email == Email);
+            if (collaborator != null)
+            {
+                context.Collaborators.Remove(collaborator);
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }
+
+

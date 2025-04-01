@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using CommonLayer.Models;
 using ManagerLayer.Interfaces;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interfaces;
 
@@ -66,6 +67,22 @@ namespace ManagerLayer.Services
         public bool AddReminder(int noteId, DateTime reminder, int UserId)
         {
             return notesRepo.AddReminder(noteId, reminder, UserId);
+        }
+        public bool AddImage(int noteId, int UserId, IFormFile Image)
+        {
+            return notesRepo.AddImage(noteId, UserId, Image);
+        }
+        public int AddCollaborator(int noteId, string Email, int UserId)
+        {
+            return notesRepo.AddCollaborator(noteId, Email, UserId);
+        }
+        public List<CollaboratorEntity> GetCollaborators(int noteId)
+        {
+            return notesRepo.GetCollaborators(noteId);
+        }
+        public bool RemoveCollaborator(int noteId, string Email)
+        {
+            return notesRepo.RemoveCollaborator(noteId, Email);
         }
     }
 }

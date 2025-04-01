@@ -282,5 +282,94 @@ namespace FundooNotesApp.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("AddImage")]
+        public IActionResult AddImage(int noteId, IFormFile Image)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                bool result = notesManager.AddImage(noteId, UserId, Image);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Image Added Successfully" });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Add Image" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPut]
+        [Route("AddCollaborator")]
+        public IActionResult AddCollaborator(int noteId, string Email)
+        {
+            try
+            {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                int result = notesManager.AddCollaborator(noteId, Email, UserId);
+                if (result != 0)
+                {
+                    return Ok(new ResponseModel<int> { Success = true, Message = "Collaborator Added Successfully", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Add Collaborator" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("GetCollaborator")]
+        public IActionResult GetCollaborator(int noteId)
+        {
+            try
+            {                
+                List<CollaboratorEntity> result = notesManager.GetCollaborators(noteId);
+                if (result != null)
+                {
+                    return Ok(new ResponseModel<CollaboratorEntity> { Success = true, Message = "Collaborator Retrieved Successfully", FullData = result });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Retrieve Collaborator" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpDelete]
+        [Route("RemoveCollaborator")]
+        public IActionResult RemoveCollaborator(int noteId, string Email)
+        {
+            try
+            {
+                bool result = notesManager.RemoveCollaborator(noteId, Email);
+                if (result)
+                {
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Collaborator Removed Successfully" });
+                }
+                else
+                {
+                    return BadRequest(new ResponseModel<string> { Success = false, Message = "Failed to Remove Collaborator" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
