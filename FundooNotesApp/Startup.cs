@@ -44,6 +44,7 @@ namespace FundooNotesApp
             services.AddTransient<INotesManager, NotesManager>();
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<ILabelManager, LabelManager>();
+            services.AddStackExchangeRedisCache(options => { options.Configuration = Configuration["RedisCacheUrl"]; });
             services.AddSwaggerGen(
                 option =>
                 {

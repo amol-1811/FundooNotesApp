@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using CommonLayer.Models;
 using ManagerLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 
 namespace FundooNotesApp.Controllers
@@ -13,9 +17,13 @@ namespace FundooNotesApp.Controllers
     public class NotesController : ControllerBase
     {
         private readonly INotesManager notesManager;
-        public NotesController(INotesManager notesManager)
+        private readonly IDistributedCache cache;
+        private readonly FundooDBContext context;
+        public NotesController(INotesManager notesManager, IDistributedCache cache, FundooDBContext context)
         {
             this.notesManager = notesManager;
+            this.cache = cache;
+            this.context = context;
         }
 
         [HttpPost]
@@ -333,7 +341,7 @@ namespace FundooNotesApp.Controllers
         public IActionResult GetCollaborator(int noteId)
         {
             try
-            {                
+            {
                 List<CollaboratorEntity> result = notesManager.GetCollaborators(noteId);
                 if (result != null)
                 {
@@ -370,6 +378,32 @@ namespace FundooNotesApp.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpGet]
+        [Route("GetAllNotesUsingRedisCache")]
+        public async Task<IActionResult> GetAllNotesUsingRedisCache()
+        {
+            var cacheKey = "notesList";
+            string serializedNotesList;
+            var notesList = new List<NotesEntity>();
+            byte[] redisNotesList = await cache.GetAsync(cacheKey);
+            if (redisNotesList != null)
+            {
+                serializedNotesList = System.Text.Encoding.UTF8.GetString(redisNotesList);
+                notesList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<NotesEntity>>(serializedNotesList);
+            }
+            else
+            {
+                notesList = context.Notes.ToList();
+                serializedNotesList = Newtonsoft.Json.JsonConvert.SerializeObject(notesList);
+                redisNotesList = System.Text.Encoding.UTF8.GetBytes(serializedNotesList);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddHours(1))
+                    .SetSlidingExpiration(TimeSpan.FromHours(1));
+                await cache.SetAsync(cacheKey, redisNotesList, options);
+            }
+            return Ok(notesList);
         }
     }
 }

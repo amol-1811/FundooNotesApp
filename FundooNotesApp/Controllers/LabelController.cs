@@ -96,5 +96,3 @@ namespace FundooNotesApp.Controllers
     }
 }
 
-
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbElkIjoiZ29zYXZpYW1vbDE4MTFAZ21haWwuY29tIiwiVXNlcklEIjoiNiIsImV4cCI6MTc0MzY3MTExOCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo0NDMwNy8iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0MzA3LyJ9.2s9GcJF63G2SwuMmEJWtGfUKoGWlr_4NmzctSNiemAM
