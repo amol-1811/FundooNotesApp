@@ -27,5 +27,6 @@ namespace RepositoryLayer.Entity
 
         [JsonIgnore]
         public virtual UserEntity NotesUser { get; set; }
+        public virtual ICollection<NoteLabelEntity> NoteLabels { get; set; } = new List<NoteLabelEntity>();
     }
 }
