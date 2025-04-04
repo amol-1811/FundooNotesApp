@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace FundooNotesApp.Controllers
 {
@@ -17,10 +18,12 @@ namespace FundooNotesApp.Controllers
     {
         private readonly IUserManager userManager;
         private readonly IBus bus;
-        public UsersController(IUserManager userManager, IBus bus)
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(IUserManager userManager, IBus bus, ILogger<UsersController> logger)
         {
             this.userManager = userManager;
             this.bus = bus;
+            _logger = logger;
         }
         //http//localhost:44306/api/Users/Reg
         [HttpPost]
@@ -35,6 +38,7 @@ namespace FundooNotesApp.Controllers
             else
             {
                 var result = userManager.Register(model);
+                HttpContext.Session.SetInt32("UserId", result.UserId);
                 if (result != null)
                 {
                     return Ok(new ResponseModel<UserEntity> { Success = true, Message = "User registered successfully", Data = result });
@@ -76,6 +80,8 @@ namespace FundooNotesApp.Controllers
 
                     return Ok(new ResponseModel<string> { Success = true, Message = "Mail sent successfully", Data = forgot.ToString() });
 
+                    throw new Exception("Error Occured");
+
                 }
                 else
                 {
@@ -85,6 +91,7 @@ namespace FundooNotesApp.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while sending email");
                 throw ex;
             }
         }

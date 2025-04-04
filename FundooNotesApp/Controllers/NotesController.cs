@@ -33,7 +33,8 @@ namespace FundooNotesApp.Controllers
         {
             try
             {
-                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                //int UserId = int.Parse(User.FindFirst("UserID").Value);
+                int UserId = (int)HttpContext.Session.GetInt32("UserId");
 
                 NotesEntity result = notesManager.AddNotes(UserId, model);
                 if (result != null)

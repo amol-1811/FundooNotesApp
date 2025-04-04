@@ -45,6 +45,12 @@ namespace FundooNotesApp
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<ILabelManager, LabelManager>();
             services.AddStackExchangeRedisCache(options => { options.Configuration = Configuration["RedisCacheUrl"]; });
+            services.AddSession(x =>
+            {
+                x.IdleTimeout = TimeSpan.FromMinutes(1);
+                x.Cookie.HttpOnly = true;
+                x.Cookie.IsEssential = true;
+            });
             services.AddSwaggerGen(
                 option =>
                 {
@@ -119,6 +125,7 @@ namespace FundooNotesApp
                 app.UseDeveloperExceptionPage();
             }
             app.UseAuthentication();
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseSwagger();
 
