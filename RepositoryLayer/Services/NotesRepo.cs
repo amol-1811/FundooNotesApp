@@ -31,6 +31,7 @@ namespace RepositoryLayer.Services
             NotesEntity note = new NotesEntity();
             note.Title = model.Title;
             note.Description = model.Description;
+            note.Color = model.Color;
             note.UserId = UserId;
             this.context.Notes.Add(note);
             context.SaveChanges();
@@ -163,12 +164,24 @@ namespace RepositoryLayer.Services
             }
             return 3;
         }
-        public bool AddColor(int noteId, string Colour, int UserId)
+        public bool AddColor(int noteId, string Color, int UserId)
         {
             NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteId && x.UserId == UserId);
             if (note != null)
             {
-                note.Color = Colour;
+                note.Color = Color;
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddColor(NotesModel noteModel, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteModel.noteId && x.UserId == UserId);
+            if (note != null)
+            {
+                note.Color = noteModel.Color;
                 context.SaveChanges();
                 return true;
             }
@@ -181,6 +194,18 @@ namespace RepositoryLayer.Services
             if (note != null)
             {
                 note.Reminder = Reminder;
+                context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddReminder(NotesModel noteModel, int UserId)
+        {
+            NotesEntity note = context.Notes.FirstOrDefault(x => x.NotesId == noteModel.noteId && x.UserId == UserId);
+            if(note != null)
+            {
+                note.Reminder =  noteModel.Reminder;
                 context.SaveChanges();
                 return true;
             }

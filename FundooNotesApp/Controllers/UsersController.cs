@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FundooNotesApp.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -27,9 +27,10 @@ namespace FundooNotesApp.Controllers
         }
         //http//localhost:44306/api/Users/Reg
         [HttpPost]
-        [Route("Reg")]
+        [Route("register")]
         public IActionResult Register(RegisterModel model)
         {
+            _logger.LogInformation("Request Received", model.ToString());
             var check = userManager.CheckEmail(model.Email);
             if (check)
             {
@@ -48,7 +49,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         public IActionResult Login(LoginModel loginModel)
         {
             var result = userManager.Login(loginModel);
@@ -60,7 +61,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPost]
-        [Route("ForgotPassword")]
+        [Route("forgotpassword")]
         
 
         public async Task<IActionResult> ForgotPassowod(string Email)
@@ -98,7 +99,7 @@ namespace FundooNotesApp.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("ResetPassword")]
+        [Route("resetpassword")]
 
         public ActionResult ResetPassword(ResetPasswordModel reset)
         {
@@ -122,7 +123,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllUsers")]
+        [Route("getallusers")]
         public IActionResult GetAllUsers()
         {
             var result = userManager.GetAllUsers();
@@ -134,7 +135,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetUserById")]
+        [Route("getuserbyid")]
         public IActionResult GetUserById(int userId)
         {
             var result = userManager.GetUserById(userId);
@@ -146,7 +147,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetUserByFirstLetter")]
+        [Route("getuserbyfirstletter")]
         public IActionResult GetUserByFirsttLetter(string letter)
         {
             var result = userManager.GetUserByFirstLetter(letter);
@@ -158,7 +159,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("CountUsers")]
+        [Route("countusers")]
         public IActionResult CountUsers()
         {
             var result = userManager.CountUsers();
@@ -170,7 +171,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetUsersByOrder")]
+        [Route("getusersbyorder")]
         public IActionResult GetUsersByOrder(bool ascending)
         {
             var result = userManager.GetUsersByOrder(ascending);
@@ -182,7 +183,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetAverageAge")]
+        [Route("getaverageage")]
         public IActionResult GetAverageAge()
         {
             var result = userManager.GetAverageAge();
@@ -194,7 +195,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetYoungestAge")]
+        [Route("getyoungestage")]
         public IActionResult GetYoungestAge()
         {
             var result = userManager.GetYoungestAge();
@@ -205,7 +206,7 @@ namespace FundooNotesApp.Controllers
             return BadRequest(new ResponseModel<int> { Success = false, Message = "Failed to retrieve youngest age", Data = result });
         }
         [HttpGet]
-        [Route("GetOldestAge")]
+        [Route("getoldestage")]
         public IActionResult GetOldestAge()
         {
             var result = userManager.GetOldestAge();

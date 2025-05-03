@@ -19,8 +19,10 @@ namespace ManagerLayer.Interfaces
         public int ArchiveNote(int noteId, int UserId);
         public int TrashNotes(int noteId, int UserId);
         public int RestoreFromTrash(int noteId, int UserId);
-        public bool AddColor(int noteId, string Colour, int UserId);
+        public bool AddColor(int noteId, string Color, int UserId);
+        public bool AddColor(NotesModel noteModel, int UserId);
         public bool AddReminder(int noteId, DateTime reminder, int UserId);
+        public bool AddReminder(NotesModel noteModel, int UserId);
         public bool AddImage(int noteId, int UserId, IFormFile Image);
         public int AddCollaborator(int noteId, string Email, int UserId);
         public List<CollaboratorEntity> GetCollaborators(int noteId);

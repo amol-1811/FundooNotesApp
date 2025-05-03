@@ -9,7 +9,7 @@ using RepositoryLayer.Entity;
 
 namespace FundooNotesApp.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class LabelController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace FundooNotesApp.Controllers
             this.labelManager = labelManager;
         }
 
-        [HttpPost("AddLabel")]
+        [HttpPost("addlabel")]
         public async Task<IActionResult> AddLabel(string name)
         {
             try
@@ -38,7 +38,7 @@ namespace FundooNotesApp.Controllers
             }
         }
 
-        [HttpGet("GetAllLabels")]
+        [HttpGet("getalllabels")]
         public async Task<IActionResult> GetAllLabels()
         {
             try
@@ -56,7 +56,7 @@ namespace FundooNotesApp.Controllers
             }
         }
 
-        [HttpPost("AssignLabelToNote")]
+        [HttpPost("assignlabeltonote")]
         public async Task<IActionResult> AssignLabelToNote(int noteId, int labelId)
         {
             try
@@ -75,7 +75,7 @@ namespace FundooNotesApp.Controllers
             }
         }
 
-        [HttpDelete("DeleteLabel")]
+        [HttpDelete("deletelabel")]
         public async Task<IActionResult> DeleteLabel(int labelId, int noteId)
         {
             try

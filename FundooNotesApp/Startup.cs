@@ -44,6 +44,8 @@ namespace FundooNotesApp
             services.AddTransient<INotesManager, NotesManager>();
             services.AddTransient<ILabelRepo, LabelRepo>();
             services.AddTransient<ILabelManager, LabelManager>();
+            services.AddTransient<ITimeZoneRepo, TimeZoneRepo>();
+            services.AddTransient<ITimeZoneManager, TimeZoneManager>();
             services.AddStackExchangeRedisCache(options => { options.Configuration = Configuration["RedisCacheUrl"]; });
             services.AddSession(x =>
             {
@@ -115,6 +117,18 @@ namespace FundooNotesApp
                 }));
             });
             services.AddMassTransitHostedService();
+            services.AddCors();
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(name: "AllowOrigin",
+            //        builder =>
+            //        {
+            //            builder.WithOrigins("http://localhost:4200")
+            //                .AllowAnyHeader()
+            //                .AllowAnyMethod();
+            //        }
+            //    );
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -124,6 +138,14 @@ namespace FundooNotesApp
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(builder =>
+            {
+                builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
+            //app.UseCors("AllowOrigin"); 
             app.UseAuthentication();
             app.UseSession();
             app.UseHttpsRedirection();

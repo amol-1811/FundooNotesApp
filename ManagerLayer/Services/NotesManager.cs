@@ -60,13 +60,23 @@ namespace ManagerLayer.Services
         {
             return notesRepo.RestoreFromTrash(noteId, UserId);
         }
-        public bool AddColor(int noteId, string Colour, int UserId)
+        public bool AddColor(int noteId, string Color, int UserId)
         {
-            return notesRepo.AddColor(noteId, Colour, UserId);
+            return notesRepo.AddColor(noteId, Color, UserId);
         }
+        public bool AddColor(NotesModel noteModel, int UserId)
+        {
+            return notesRepo.AddColor(noteModel, UserId);
+        }
+
         public bool AddReminder(int noteId, DateTime reminder, int UserId)
         {
             return notesRepo.AddReminder(noteId, reminder, UserId);
+        }
+
+        public bool AddReminder(NotesModel noteModel, int UserId)
+        {
+            return notesRepo.AddReminder(noteModel, UserId);
         }
         public bool AddImage(int noteId, int UserId, IFormFile Image)
         {

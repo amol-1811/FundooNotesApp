@@ -14,7 +14,7 @@ namespace CommonLayer.Models
         [Required(ErrorMessage = "Please enter valid birthdate.")]
         public DateTime DOB { get; set; }
         [Required(ErrorMessage = "Gender is required.")]
-        [RegularExpression("^(Male|Female|Other)$", ErrorMessage = "Gender must be Male, Female, or Other.")]
+        //[RegularExpression("^(Male|Female|Other)$", ErrorMessage = "Gender must be Male, Female, or Other.")]
         public string Gender { get; set; }
         [EmailAddress(ErrorMessage ="Enter valid email address")]
         public string Email { get; set; }

@@ -12,7 +12,7 @@ using RepositoryLayer.Entity;
 
 namespace FundooNotesApp.Controllers
 {
-    [Route("api/[controller]")]
+   // [Route("api/[controller]")]
     [ApiController]
     public class NotesController : ControllerBase
     {
@@ -27,14 +27,14 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPost]
-        [Route("AddNotes")]
+        [Route("createnote")]
 
         public IActionResult AddNotes(NotesModel model)
         {
             try
             {
-                //int UserId = int.Parse(User.FindFirst("UserID").Value);
-                int UserId = (int)HttpContext.Session.GetInt32("UserId");
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
+                //int UserId = (int)HttpContext.Session.GetInt32("UserId");
 
                 NotesEntity result = notesManager.AddNotes(UserId, model);
                 if (result != null)
@@ -53,12 +53,13 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetNotes")]
+        [Route("getnotes")]
 
         public IActionResult GetNotes()
         {
             try
             {
+                int UserId = int.Parse(User.FindFirst("UserID").Value);
                 List<NotesEntity> getData = notesManager.GetNotes();
                 if (getData != null)
                 {
@@ -76,7 +77,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllNotesUsingDescAndTitle")]
+        [Route("getallnotesusingdescandtitle")]
         public IActionResult GetNotesByTitleAndDis(string Title, string description)
         {
             try
@@ -96,7 +97,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("CountAllNotes")]
+        [Route("countallnotes")]
 
         public IActionResult CountAllNotes()
         {
@@ -109,7 +110,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteNote")]
+        [Route("deletenote")]
         public IActionResult DeleteNote(int notesId)
         {
             try
@@ -132,7 +133,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateNotes")]
+        [Route("updatenotes")]
         public IActionResult UpdateNotes(int notesId, UpdateModel model)
         {
             try
@@ -155,7 +156,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("PinNotes")]
+        [Route("pinnotes")]
         public IActionResult PinNotes(int noteId)
         {
             try
@@ -178,7 +179,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("ArchiveNote")]
+        [Route("archivenote")]
         public IActionResult ArchiveNote(int noteId)
         {
             try
@@ -200,8 +201,9 @@ namespace FundooNotesApp.Controllers
             }
         }
 
+
         [HttpPut]
-        [Route("TrashNotes")]
+        [Route("trashnotes")]
         public IActionResult TrashNotes(int noteId)
         {
             try
@@ -224,7 +226,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("RestoreFromTrash")]
+        [Route("restorefromtrash")]
         public IActionResult RestoreFromTrash(int noteId)
         {
             try
@@ -247,16 +249,19 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("AddColor")]
-        public IActionResult AddColor(int noteId, string Colour)
+        [Route("addcolor")]
+        public IActionResult AddColor(NotesModel noteModel)
         {
             try
             {
+                int noteId = noteModel.noteId;
+                string color = noteModel.Color;
+
                 int UserId = int.Parse(User.FindFirst("UserID").Value);
-                bool result = notesManager.AddColor(noteId, Colour, UserId);
+                bool result = notesManager.AddColor(noteModel, UserId);
                 if (result)
                 {
-                    return Ok(new ResponseModel<bool> { Success = true, Message = "Color Added Successfully" });
+                    return Ok(new ResponseModel<bool> { Success = true, Message = "Color Added Successfully", Data=result });
                 }
                 else
                 {
@@ -269,13 +274,15 @@ namespace FundooNotesApp.Controllers
             }
         }
         [HttpPut]
-        [Route("AddReminder")]
-        public IActionResult AddReminder(int noteId, DateTime reminder)
+        [Route("addreminder")]
+        public IActionResult AddReminder(int noteId, NotesModel noteModel)
         {
             try
             {
+                DateTime Reminder = noteModel.Reminder;
+
                 int UserId = int.Parse(User.FindFirst("UserID").Value);
-                bool result = notesManager.AddReminder(noteId, reminder, UserId);
+                bool result = notesManager.AddReminder(noteModel, UserId);
                 if (result)
                 {
                     return Ok(new ResponseModel<bool> { Success = true, Message = "Reminder Added Successfully" });
@@ -292,7 +299,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("AddImage")]
+        [Route("addimage")]
         public IActionResult AddImage(int noteId, IFormFile Image)
         {
             try
@@ -315,7 +322,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpPut]
-        [Route("AddCollaborator")]
+        [Route("addcollaborator")]
         public IActionResult AddCollaborator(int noteId, string Email)
         {
             try
@@ -338,7 +345,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetCollaborator")]
+        [Route("getcollaborator")]
         public IActionResult GetCollaborator(int noteId)
         {
             try
@@ -360,7 +367,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpDelete]
-        [Route("RemoveCollaborator")]
+        [Route("removecollaborator")]
         public IActionResult RemoveCollaborator(int noteId, string Email)
         {
             try
@@ -382,7 +389,7 @@ namespace FundooNotesApp.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllNotesUsingRedisCache")]
+        [Route("getallnotesusingrediscache")]
         public async Task<IActionResult> GetAllNotesUsingRedisCache()
         {
             var cacheKey = "notesList";
